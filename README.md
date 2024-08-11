@@ -42,7 +42,9 @@ I used several technologies in doing this assignment:
 
 The following is a demo of the results I have made.
 
-![Watch the video](./docs/demo.mp4)
+https://github.com/user-attachments/assets/49caf7e7-a687-44a2-82b5-a7e701f330a4
+
+
 
 
 
