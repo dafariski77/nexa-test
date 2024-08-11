@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Counter {
+  id        Int      @id @default(autoincrement())
+  bulan     Int
+  tahun     Int
+  counter   Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("counter")
+}
+
+model Customer {
+  id        Int         @id @default(autoincrement())
+  nama      String
+  alamat    String      @db.Text
+  phone     String
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @default(now()) @map("updated_at")
+  transaksi Transaksi[]
+
+  @@map("ms_customer")
+}
+
+model Transaksi {
+  id               Int      @id @default(autoincrement())
+  idCustomer       Int      @map("id_customer")
+  nomorTransaksi   String   @map("nomor_transaksi")
+  tanggalTransaksi DateTime @map("tanggal_transaksi") @db.Date
+  totalTransaksi   Int      @map("total_transaksi")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @map("updated_at")
+
+  customer        Customer          @relation(fields: [idCustomer], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  transaksiDetail TransaksiDetail[]
+
+  @@map("transaksi")
+}
+
+model TransaksiDetail {
+  id          Int      @id @default(autoincrement())
+  idTransaksi Int      @map("id_transaksi_h")
+  kodeBarang  String   @map("kd_barang")
+  namaBarang  String   @map("nama_barang")
+  qty         Int
+  subtotal    Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+
+  transaksi Transaksi @relation(fields: [idTransaksi], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("transaksi_d")
+}
